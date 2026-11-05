@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayush Sinha</title>
+<meta name="description" content="Ayush Sinha, AI full-stack and AI automation engineer in Mumbai. Case studies in document AI, queue-based ingest and natural-language analytics.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fbf'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Ayush Sinha</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="index.html#case-studies">Case studies</a>
+      <a href="more-work.html">More work</a>
+      <a href="work-with-me.html">Work with me</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <p class="eyebrow">AI full-stack and AI automation engineer</p>
+    <h1>Ayush Sinha</h1>
+    <p class="lede">I build AI systems that run on real business data, along with the backends and dashboards around them. I live in Mumbai and work US, UK, EU or NZ hours. I'm looking for a long-term remote role on a team, and happy to start with one scoped project.</p>
+
+    <p>I have nearly 2 years of paid experience. At Maxtel I work on an AWS and TypeScript platform for New Zealand quick-service restaurant franchises. Before that I spent over a year at Braind AI, an automation agency, building LLM products for Irish and UK clients in insurance, financial advice, sales and health.</p>
+    <p>I build with Claude Code agents. Each piece of work starts as a spec, becomes a plan, and ships with tests, and I review every change before it merges. Where a model shouldn't be trusted, such as checksums, money or database writes, I put plain code in charge.</p>
+
+    <ul class="links">
+      <li><a href="https://github.com/Ayushsinha2004">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/ayusharyan-sinha-632641257">LinkedIn</a></li>
+      <li><a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a></li>
+    </ul>
+
+    <h2 id="case-studies">Case studies</h2>
+    <div class="cards">
+      <a class="card" href="case-document-ai.html">
+        <h3>Document AI for an Irish life-insurance brokerage</h3>
+        <p>Signed policy documents go through OCR, GPT extraction, validation agents and plain-code checks before anyone sends them to an insurer.</p>
+        <p class="stat">3,205 policies tracked in 7 months</p>
+      </a>
+      <a class="card" href="case-pos-ingest.html">
+        <h3>Sales ingest for 180 fast-food stores in New Zealand</h3>
+        <p>A synchronous ingest path rebuilt on SQS FIFO and Fargate workers, then load-tested until it held.</p>
+        <p class="stat">p99 accept latency 13.3s to 1.63s</p>
+      </a>
+      <a class="card" href="case-erp-analytics.html">
+        <h3>Talk to your ERP</h3>
+        <p>Plain-English questions over a 64k-order ERP mirror. The model writes a whitelisted query plan that the server validates and runs read-only.</p>
+        <p class="stat">70 of 74 questions answered in the eval sweep</p>
+      </a>
+      <a class="card" href="more-work.html">
+        <h3>More work</h3>
+        <p>Call-QA scoring, an AI sales platform, a WhatsApp nutrition coach, n8n agent workflows and my delivery record at Maxtel.</p>
+        <p class="stat">306 merged PRs in 4 months</p>
+      </a>
+    </div>
+
+    <h2 id="work-with-me">Work with me</h2>
+    <p>I offer four fixed-scope engagements: an AI document pipeline, an LLM eval harness, an n8n to TypeScript migration, and an embedded engineer retainer. I work hourly or quote a fixed price per scope. I can also work under an agency's brand.</p>
+    <p><a class="button" href="work-with-me.html">See the offers</a></p>
+
+    <h2 id="stack">Stack</h2>
+    <h3>Languages</h3>
+    <ul class="tags"><li>TypeScript</li><li>JavaScript</li><li>SQL</li><li>Python</li><li>Bash</li><li>Go (familiar)</li></ul>
+    <h3>LLM and AI</h3>
+    <ul class="tags"><li>OpenAI API</li><li>Claude API</li><li>Structured outputs</li><li>Tool calling</li><li>RAG</li><li>Embeddings and pgvector</li><li>LLM evals</li><li>LLM-as-a-judge</li><li>Whisper</li><li>OCR and document extraction</li><li>Human-in-the-loop review</li><li>n8n (including its LangChain nodes)</li></ul>
+    <h3>Backend and frontend</h3>
+    <ul class="tags"><li>Node.js</li><li>NestJS</li><li>Fastify</li><li>Express</li><li>Zod</li><li>React</li><li>Next.js</li><li>Vite</li><li>Tailwind CSS</li></ul>
+    <h3>Data and cloud</h3>
+    <ul class="tags"><li>PostgreSQL</li><li>Row-level security</li><li>Drizzle ORM</li><li>Supabase</li><li>Event sourcing</li><li>AWS CDK</li><li>ECS Fargate</li><li>SQS</li><li>S3</li><li>Lambda</li><li>EventBridge</li><li>CloudWatch</li><li>Docker</li><li>GitHub Actions</li></ul>
+    <h3>Testing and AI dev tools</h3>
+    <ul class="tags"><li>Vitest</li><li>Playwright</li><li>k6</li><li>Golden-file tests</li><li>Claude Code (skills, hooks, sub-agents)</li><li>MCP</li></ul>
+
+    <h2 id="projects">Selected projects</h2>
+    <ul>
+      <li><a href="https://github.com/AlmogBaku/debug-skill/pull/21">Fix for a hang in dap</a>, an open-source Go debugger CLI that AI coding agents use. js-debug's child session was never read, so every Node.js debug command hung. My fix comes with a fake-adapter unit test that reproduces the hang in CI, and the project's own Node end-to-end test went from timing out to passing in 3.5s. The PR is open upstream.</li>
+      <li>A local semantic code-search setup for coding agents. I set up an existing MCP server (claude-context) with Ollama embeddings and a Milvus vector database, so agents could search 6 proprietary repositories without any source code leaving the machine.</li>
+      <li>A parallel-worktree tool in Bash (18 commands) that gives each AI-agent branch its own git worktree, ports and Postgres database, so up to 7 feature branches can be built and tested at once.</li>
+    </ul>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Ayush Sinha, Mumbai. <a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a> · <a href="https://github.com/Ayushsinha2004">GitHub</a> · <a href="https://www.linkedin.com/in/ayusharyan-sinha-632641257">LinkedIn</a></p>
+    <p>Client names are left out on purpose. Each client is described by country and industry.</p>
+  </div>
+</footer>
+</body>
+</html>

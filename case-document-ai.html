@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Insurance Document AI</title>
+<meta name="description" content="Case study: an AI pipeline that reads and checks signed life-insurance policy documents for an Irish brokerage.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fbf'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Ayush Sinha</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#case-studies">Case studies</a>
+      <a href="more-work.html">More work</a>
+      <a href="work-with-me.html">Work with me</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <p class="eyebrow">Case study · Braind AI</p>
+    <h1>Document AI for an Irish life-insurance brokerage</h1>
+    <p class="lede">An n8n pipeline reads each signed policy pack with OCR and GPT, checks it across documents, and puts it in front of ops staff for review before it goes to the insurer.</p>
+
+    <table class="facts">
+      <tr><th>Client</th><td>A life-insurance brokerage in Ireland</td></tr>
+      <tr><th>Employer</th><td>Braind AI, as a contract AI engineer</td></tr>
+      <tr><th>My part</th><td>Built the AI pipeline. Owned the React review dashboard (75% of its commits).</td></tr>
+      <tr><th>Users</th><td>The brokerage's operations team, working with 47 advisors across 7 sales boards</td></tr>
+    </table>
+
+    <h2>Problem</h2>
+    <p>When a client signs on DocuSign, the brokerage has a pack of documents to check before the policy can go to the insurer: the fact find, the application, the statement of suitability and the direct debit mandate. Someone had to read them, compare values across them, and check the premium against what the advisor recorded on the sales board. That manual pass took an estimated 20-30 minutes per policy.</p>
+
+    <h2>Constraints</h2>
+    <ul>
+      <li>The documents are scans and signed PDFs, so OCR errors are common. A single wrong digit in a bank account number would break the direct debit.</li>
+      <li>Some fields can't be left to a model at all. An IBAN is either valid or it isn't, and a premium either matches the sales record or it doesn't.</li>
+      <li>One DocuSign envelope can hold several policies, and the same envelope can arrive more than once, so duplicates had to be stopped at every stage.</li>
+      <li>A person signs off on every policy. The AI prepares the work and flags problems, and staff make the call.</li>
+    </ul>
+
+    <h2>Architecture</h2>
+    <figure class="figure">
+      <ol class="flow" aria-label="Pipeline from signed envelope to staff review">
+        <li><div class="node"><strong>Signed envelope</strong><span>DocuSign webhook</span></div></li>
+        <li><div class="node"><strong>Match and create</strong><span>Find the client and advisor on the sales boards, create the policy, drop duplicate envelopes</span></div></li>
+        <li><div class="node ai"><strong>OCR</strong><span>Mistral OCR on every document</span></div></li>
+        <li><div class="node ai"><strong>Extraction agent</strong><span>GPT classifies each document and fills a structured schema through an n8n output parser</span></div></li>
+        <li>
+          <div class="node ai"><strong>Validation agents</strong><span>Cross-document checks for identity, underwriting risk and financial details, each issue with a severity</span></div>
+          <div class="node check"><strong>Deterministic checks</strong><span>IBAN checksum (ISO 7064 mod-97), premium within 1 euro of the sales board, duplicate guards</span></div>
+        </li>
+        <li><div class="node"><strong>Supabase Postgres</strong><span>Policies, extracted fields and flags</span></div></li>
+        <li><div class="node human"><strong>Review dashboard</strong><span>Ops staff confirm, work the flags and send documents out</span></div></li>
+      </ol>
+      <ul class="legend"><li><i class="ai"></i>LLM or OCR step</li><li><i class="check"></i>Plain code</li><li><i class="human"></i>Human decision</li></ul>
+      <figcaption>The model extracts and flags. Code decides anything with a single right answer, and a person approves the result.</figcaption>
+    </figure>
+
+    <h2>What I did</h2>
+    <p>I built the pipeline in n8n. Intake listens for signed DocuSign envelopes, matches each one to a client and advisor on the brokerage's sales boards, and creates the policy record. Each document then goes through Mistral OCR and a GPT extraction agent that works out which document it is looking at and returns the fields as structured output.</p>
+    <p>On top of extraction I designed the cross-document validation. Separate agents compare identity details, underwriting risk answers and financial figures across the documents in a pack. Within the first 7 months they raised 3,219 flags on 1,443 policies, including 100 critical age-band cases that would otherwise have reached an insurer.</p>
+    <p>I kept the checks that have one right answer in plain code. IBANs are validated locally with the ISO 7064 mod-97 checksum, which catches OCR slips in account numbers. Premiums must match the sales board to within 1 euro. Duplicate prevention runs at every stage, because envelopes can repeat and can carry more than one policy.</p>
+    <p>I also took over the React, TypeScript, Vite and Tailwind review dashboard from a teammate who started it, and wrote 75% of its commits. It's where ops staff see each policy, its extracted values and its flags. Database and infrastructure changes on my side cut its load time from about 15s to 2s.</p>
+
+    <h2>Results</h2>
+    <div class="metrics">
+      <div class="metric"><div class="value">3,205</div><div class="label">policies tracked in the first 7 months</div></div>
+      <div class="metric"><div class="value">74 to 719</div><div class="label">monthly policy volume as the platform grew</div></div>
+      <div class="metric"><div class="value">3,219</div><div class="label">validation flags across 1,443 policies</div></div>
+      <div class="metric"><div class="value">100</div><div class="label">critical age-band cases caught before submission</div></div>
+      <div class="metric"><div class="value">20-30 min to about 4 min</div><div class="label">manual work per policy (estimated)</div></div>
+      <div class="metric"><div class="value">15s to 2s</div><div class="label">dashboard load time</div></div>
+    </div>
+
+    <h2>Stack</h2>
+    <ul class="tags"><li>n8n (LangChain agent and output-parser nodes)</li><li>OpenAI GPT</li><li>Mistral OCR</li><li>DocuSign</li><li>Supabase (Postgres)</li><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind CSS</li></ul>
+
+    <h2>Timeline</h2>
+    <ol>
+      <li>Intake and extraction: DocuSign webhook, sales-board matching, OCR and the GPT extraction agent.</li>
+      <li>Cross-document validation agents, with severities so staff could sort critical cases first.</li>
+      <li>Hardening with deterministic checks for IBANs, premiums and duplicates.</li>
+      <li>Took over the review dashboard and cut its load time from about 15s to 2s.</li>
+      <li>Over the first 7 months, monthly volume grew from 74 to 719 policies.</li>
+    </ol>
+
+    <p class="muted small">The client is described by country and industry instead of by name.</p>
+    <p><a href="index.html#case-studies">Back to case studies</a></p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Ayush Sinha, Mumbai. <a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a> · <a href="https://github.com/Ayushsinha2004">GitHub</a> · <a href="https://www.linkedin.com/in/ayusharyan-sinha-632641257">LinkedIn</a></p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talk to Your ERP</title>
+<meta name="description" content="Case study: natural-language analytics over a 64k-order ERP mirror using a validated, whitelisted query plan and a 74-question eval harness.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fbf'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Ayush Sinha</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#case-studies">Case studies</a>
+      <a href="more-work.html">More work</a>
+      <a href="work-with-me.html">Work with me</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <p class="eyebrow">Case study · Braind AI</p>
+    <h1>Talk to your ERP</h1>
+    <p class="lede">A natural-language analytics assistant over a 64k-order ERP mirror. The LLM writes a JSON query plan, the server checks it against a whitelist and runs it through a read-only API, and an eval harness keeps it honest after every change.</p>
+
+    <table class="facts">
+      <tr><th>Client</th><td>A B2B workplace supplier in Ireland</td></tr>
+      <tr><th>Employer</th><td>Braind AI, as a contract AI engineer</td></tr>
+      <tr><th>Context</th><td>Part of a €31k AI sales platform I built as sole engineer in about 6 weeks</td></tr>
+      <tr><th>Users</th><td>The supplier's sales team and management</td></tr>
+    </table>
+
+    <h2>Problem</h2>
+    <p>The sales team and management wanted to ask questions about customers, orders and products in plain English. The ERP tables belonged to another system and had to stay read-only. Generated SQL is hard to fence in, and LLM analytics can fail with a "confident zero", where the model filters on a value that doesn't exist in the data, gets no rows, and reports zero as the answer.</p>
+
+    <h2>Constraints</h2>
+    <ul>
+      <li>Writes to the ERP data had to be impossible, whatever the model produced.</li>
+      <li>Filters had to use values that exist in the data, such as the actual category names.</li>
+      <li>Relative dates like "last quarter" had to resolve the same way every time, in Irish time.</li>
+      <li>Every prompt or schema change needed a repeatable check, so improvements on one question didn't quietly break others.</li>
+    </ul>
+
+    <h2>Architecture</h2>
+    <figure class="figure">
+      <ol class="flow" aria-label="Question to answer pipeline">
+        <li><div class="node human"><strong>Question</strong><span>Typed into the chat screen</span></div></li>
+        <li><div class="node check"><strong>Grounding</strong><span>Real distinct values of low-cardinality columns (cached), the closest worked examples, and date windows computed in code</span></div></li>
+        <li><div class="node ai"><strong>LLM call 1: query plan</strong><span>JSON naming a dataset, columns, filters and an aggregate</span></div></li>
+        <li><div class="node check"><strong>Plan validator</strong><span>Dataset and column whitelist. Anything else is rejected.</span></div></li>
+        <li><div class="node"><strong>Read-only API</strong><span>The plan becomes a GET on a PostgREST API. Aggregation runs in code.</span></div></li>
+        <li>
+          <div class="node ai"><strong>LLM call 2: answer</strong><span>Written from the returned rows only</span></div>
+          <div class="node ai"><strong>Back-translation check</strong><span>The executed plan is rendered back into English and an LLM judges whether it answers the question</span></div>
+        </li>
+        <li><div class="node human"><strong>Answer</strong><span>Shown with where the numbers came from, plus a note if the check had doubts</span></div></li>
+      </ol>
+      <ul class="legend"><li><i class="ai"></i>LLM step</li><li><i class="check"></i>Plain code</li><li><i class="human"></i>User</li></ul>
+      <figcaption>The model never sends SQL. The only thing it can produce is a plan, and a plan can only describe a read.</figcaption>
+    </figure>
+
+    <h2>What I did</h2>
+    <p>I rejected text-to-SQL early. The model writes a JSON query plan, and the server validates it against a per-dataset column whitelist before turning it into a GET request on a read-only PostgREST API. Because a plan can only describe a read, writes are impossible by construction.</p>
+    <p>To stop the confident-zero failure, the assistant samples the real distinct values of short columns before planning and puts them in the prompt, so the model filters on values that exist. It also retrieves the worked examples closest to the question and passes in date windows already computed in Irish time, so the model never does date arithmetic.</p>
+    <p>After a query runs, a second call writes the answer from the rows. In parallel, a back-translation verifier renders the executed plan back into English and asks an LLM whether that plan answers the question. The verifier only adds a disclosure to the answer and never rewrites it.</p>
+    <p>I built a 74-question eval harness from the client's own question catalogue. It runs against the live endpoint after every prompt or schema change and records the dataset and aggregate chosen, the row count and the latency. I also wrote the model-aware OpenAI client underneath, which handles GPT-5 reasoning-token budgets, retries, and per-call token and dollar cost metering.</p>
+
+    <h2>Results</h2>
+    <div class="metrics">
+      <div class="metric"><div class="value">70 of 74</div><div class="label">questions answered in a hand-checked live sweep</div></div>
+      <div class="metric"><div class="value">median 12s</div><div class="label">latency per question in the sweep</div></div>
+      <div class="metric"><div class="value">64k</div><div class="label">orders in the ERP mirror</div></div>
+    </div>
+    <p>The assistant refused the out-of-scope and destructive requests in the sweep, and none of them could have changed data in any case.</p>
+
+    <h2>Stack</h2>
+    <ul class="tags"><li>Node.js</li><li>Express</li><li>React</li><li>TypeScript</li><li>OpenAI API</li><li>Structured outputs</li><li>Retrieval of few-shot examples</li><li>PostgreSQL via PostgREST</li><li>Supabase</li><li>Docker</li></ul>
+
+    <h2>Timeline</h2>
+    <p>The assistant was one feature of the sales platform, built in about 6 weeks.</p>
+    <ol>
+      <li>Query-plan design, whitelist validator and the read-only execution path.</li>
+      <li>Value grounding and retrieved few-shot examples, so plans filter on values that exist.</li>
+      <li>The back-translation verifier.</li>
+      <li>The 74-question eval harness, re-run after each prompt or schema change.</li>
+    </ol>
+
+    <p class="muted small">The client is described by country and industry instead of by name.</p>
+    <p><a href="index.html#case-studies">Back to case studies</a></p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Ayush Sinha, Mumbai. <a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a> · <a href="https://github.com/Ayushsinha2004">GitHub</a> · <a href="https://www.linkedin.com/in/ayusharyan-sinha-632641257">LinkedIn</a></p>
+  </div>
+</footer>
+</body>
+</html>

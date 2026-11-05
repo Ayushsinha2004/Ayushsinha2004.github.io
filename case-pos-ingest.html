@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>180-Store Sales Ingest</title>
+<meta name="description" content="Case study: rebuilding point-of-sale ingest for a 180-store fast-food franchise group in New Zealand on SQS FIFO and ECS Fargate.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fbf'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Ayush Sinha</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#case-studies">Case studies</a>
+      <a href="more-work.html">More work</a>
+      <a href="work-with-me.html">Work with me</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <p class="eyebrow">Case study · Maxtel</p>
+    <h1>Sales ingest for a 180-store fast-food franchise group in New Zealand</h1>
+    <p class="lede">Every night each store's point-of-sale system sends its sales, and by morning every one of them has to be in the ledger. I moved that ingest off a synchronous request path onto S3, SQS FIFO and autoscaled Fargate workers, then load-tested it until it held at 180 stores.</p>
+
+    <table class="facts">
+      <tr><th>Client</th><td>A fast-food franchise group in New Zealand, rolling out to 180 stores</td></tr>
+      <tr><th>Employer</th><td>Maxtel, as a contract software engineer</td></tr>
+      <tr><th>Product</th><td>An AWS and TypeScript platform replacing a legacy low-code back office for the franchises</td></tr>
+      <tr><th>How I built it</th><td>With Claude Code agents, working from a spec, a plan and tests. I reviewed every change before it merged.</td></tr>
+    </table>
+
+    <h2>Problem</h2>
+    <p>Store sales arrive as XML bundles. The old path parsed each bundle inside the HTTP request, in a single 930-line database transaction. It managed 3.75 bundles a minute, which was too slow for a 180-store rollout, and long requests were timing out at the load balancer. Two pushes for neighbouring days from the same store could also race each other, which left some sales days silently underived.</p>
+
+    <h2>Constraints</h2>
+    <ul>
+      <li>No store-day can go missing. Sales feed stock, costing and the reports sent back to the franchisor.</li>
+      <li>Bundles from one store have to be processed in order, while different stores can run in parallel.</li>
+      <li>The ledger is a shared multi-tenant Postgres database with row-level security, so heavy locking hurts every tenant.</li>
+      <li>The rollout goes tenant by tenant behind a feature flag, and the new path had to be proven under a full-size load test before any of that.</li>
+    </ul>
+
+    <h2>Architecture</h2>
+    <figure class="figure">
+      <ol class="flow" aria-label="Ingest pipeline from store to ledger">
+        <li><div class="node"><strong>Store point-of-sale</strong><span>Nightly XML sales bundle, sent through a relay</span></div></li>
+        <li><div class="node"><strong>Accept endpoint</strong><span>Store raw bytes in S3, write a pending row, reply fast</span></div></li>
+        <li><div class="node"><strong>SQS FIFO queue</strong><span>One message group per store, so each store's days stay in order. Dead-letter queue behind it.</span></div></li>
+        <li><div class="node"><strong>ECS Fargate workers</strong><span>Autoscaled. Claim the pending row, parse the bundle, derive ledger events.</span></div></li>
+        <li><div class="node"><strong>Postgres event ledger</strong><span>Multi-tenant, row-level security</span></div></li>
+        <li>
+          <div class="node check"><strong>Scheduled sweep</strong><span>EventBridge job that finds sales days which never completed</span></div>
+          <div class="node human"><strong>Alarms and recovery</strong><span>CloudWatch metrics and alarms, plus a support console to replay a failed ingest</span></div>
+        </li>
+      </ol>
+      <ul class="legend"><li><i class="check"></i>Self-healing check</li><li><i class="human"></i>Operator path</li></ul>
+      <figcaption>Keying the FIFO message group by store removed the neighbouring-day race. The request path only stores and enqueues.</figcaption>
+    </figure>
+
+    <h2>What I did</h2>
+    <p>I re-architected the accept path so it does very little. It writes the raw bundle to S3, records a pending row, and sends one SQS FIFO message keyed by store. A pool of autoscaled Fargate workers picks up the messages, claims the row, parses the XML and derives the ledger events. A scheduled EventBridge sweep catches any sales day that didn't complete, and support staff get a console to replay a failed ingest without engineering help.</p>
+    <p>The first 180-store load test failed. p99 accept latency was 13.3s. I worked through the CloudWatch metrics and found three root causes. S3 writes were happening inside a locked database transaction. A version check parsed the whole XML file just to read one attribute. And the autoscaler was scaling in workers that were still busy. I moved the S3 writes out of the lock, replaced the full parse with a root-tag scan (507ms to 10ms at p50), and stopped busy workers from being scaled in. Together that cut p99 accept latency 8x.</p>
+    <p>Afterwards I extracted the reusable CDK constructs and the async-ingest runtime into shared npm packages and moved consumers across 4 repositories onto them. Synth-diffing 14 stack and environment pairs showed zero infrastructure drift.</p>
+
+    <h2>Results</h2>
+    <p>Measured in a 180-store, 7-day k6 load test of 1,260 bundles at 5 MiB each.</p>
+    <div class="metrics">
+      <div class="metric"><div class="value">13.3s to 1.63s</div><div class="label">server-side p99 accept latency (8x)</div></div>
+      <div class="metric"><div class="value">3.75 to 13-15</div><div class="label">bundles per minute</div></div>
+      <div class="metric"><div class="value">0</div><div class="label">dead-lettered messages</div></div>
+      <div class="metric"><div class="value">0</div><div class="label">gateway timeouts (504s)</div></div>
+      <div class="metric"><div class="value">0 of 1,080</div><div class="label">site-days silently dropped</div></div>
+      <div class="metric"><div class="value">507ms to 10ms</div><div class="label">version check at p50 after the parse fix</div></div>
+    </div>
+    <p>On real traffic, accept latency went from 4.5-7s to 0.7-1.1s.</p>
+
+    <h2>Stack</h2>
+    <ul class="tags"><li>TypeScript</li><li>NestJS</li><li>PostgreSQL</li><li>SQS FIFO</li><li>S3</li><li>ECS Fargate</li><li>EventBridge</li><li>CloudWatch</li><li>AWS CDK</li><li>k6</li></ul>
+
+    <h2>Timeline</h2>
+    <ol>
+      <li>Designed the queue-and-worker ingest and the per-tenant feature flag.</li>
+      <li>Built the accept path, FIFO queue, Fargate workers, sweep and alarms.</li>
+      <li>First 180-store load test: p99 accept latency of 13.3s, a fail.</li>
+      <li>Traced the three root causes and fixed them.</li>
+      <li>Rerun of the 180-store, 7-day test: p99 of 1.63s, 0 dead letters, 0 dropped site-days.</li>
+      <li>Extracted the pattern into shared packages used across 4 repositories.</li>
+    </ol>
+
+    <p class="muted small">The client is described by country and industry instead of by name.</p>
+    <p><a href="index.html#case-studies">Back to case studies</a></p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Ayush Sinha, Mumbai. <a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a> · <a href="https://github.com/Ayushsinha2004">GitHub</a> · <a href="https://www.linkedin.com/in/ayusharyan-sinha-632641257">LinkedIn</a></p>
+  </div>
+</footer>
+</body>
+</html>

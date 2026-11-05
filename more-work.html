@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>More Work</title>
+<meta name="description" content="Shorter write-ups of other AI systems Ayush Sinha has built: call-QA scoring, an AI sales platform, a WhatsApp nutrition coach, n8n agents and delivery at Maxtel.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fbf'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Ayush Sinha</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#case-studies">Case studies</a>
+      <a href="more-work.html" aria-current="page">More work</a>
+      <a href="work-with-me.html">Work with me</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1>More work</h1>
+    <p class="lede">Shorter notes on other systems I've built. Clients are described by country and industry.</p>
+
+    <h2>Call-QA platform for an Irish insurance brokerage</h2>
+    <p>I built this end to end at Braind AI. Dialer recordings are pulled in, transcribed with Whisper, and scored by an LLM against a versioned sales-script knowledge base, with separate portals for managers and executives. Scoring sits behind a provider-agnostic adapter (OpenAI or Anthropic). Every score stores the model, temperature and knowledge-base version, and the system refuses to score against an incomplete rubric. An executable suite checks 27 acceptance criteria against golden transcripts. Managers' edits to coaching emails are summarised weekly into versioned prompt adjustments, leaving the base rubric untouched.</p>
+    <ul class="tags"><li>Whisper</li><li>OpenAI and Claude APIs</li><li>Fastify</li><li>Next.js</li><li>Postgres with RLS</li><li>AWS CDK</li><li>ECS Fargate</li></ul>
+
+    <h2>AI sales platform for an Irish B2B supplier</h2>
+    <p>I was the sole engineer on this €31k platform and built it in about 6 weeks with Node, Express, React and TypeScript. It takes in about 2,000 website-visitor companies, removes existing ERP customers with a 5-pass identity resolver, scores leads from 0 to 100, and drafts outreach that a person approves before anything is sent. Lead-discovery agents keep the evidence behind every lead and are constrained never to invent company names. The <a href="case-erp-analytics.html">talk-to-your-ERP assistant</a> is part of this platform.</p>
+    <ul class="tags"><li>Node.js</li><li>Express</li><li>React</li><li>TypeScript</li><li>OpenAI structured outputs</li><li>Supabase</li><li>Docker</li></ul>
+
+    <h2>WhatsApp nutrition coach for about 49 Irish gyms</h2>
+    <p>The AI drafts replies to gym members on WhatsApp using retrieval. I built the responsive review dashboard (React, TypeScript, Tailwind, Supabase Realtime) where the coach approves, edits or skips each draft, and every edit is kept as training signal. Every 15 minutes a job diffs each AI draft against the coach's edit and sorts the changes into 5 failure categories, and factual corrections feed back into the live prompt. I also designed an LLM-as-judge quality loop with a pgvector gold corpus and a versioned rubric, where any rubric change the model proposes needs human approval.</p>
+    <ul class="tags"><li>React</li><li>Supabase Realtime</li><li>RAG</li><li>pgvector</li><li>LLM-as-a-judge</li><li>n8n</li><li>WhatsApp API</li></ul>
+
+    <h2>41 live n8n agent workflows</h2>
+    <p>Across 6 client systems at Braind AI I built LLM agents in 41 live n8n workflows. They use n8n's LangChain nodes: the AI Agent node with tool calling, structured and auto-fixing output parsers, Postgres chat memory and Supabase vector-store retrieval, on OpenAI and Anthropic models, triggered by webhooks. I used LangChain only through these n8n nodes. I also built the agency's QA platform for these automations, which adds execution logging to live workflows without changing their behaviour across 5 client systems and runs a nightly evaluation funnel with Claude.</p>
+
+    <h2>Admin platform for an Irish financial-advice firm</h2>
+    <p>As sole engineer I built a React, TypeScript and Supabase CRM with 30 schema migrations and 36 n8n workflows that connect SharePoint, Google Docs, Adobe Sign and other tools. GPT-4.1 drafts regulated suitability letters from client fact-find data, advisors edit them in the app, and a pipeline renders signature-ready documents. A 77-assertion simulator runs the production workflow code offline and fails if the letter template contract breaks.</p>
+
+    <h2>Delivery at Maxtel</h2>
+    <p>I delivered 306 merged pull requests across 7 repositories in 4 months, and I'm the largest contributor to the core event-ledger service (225 of 746 merged PRs). I build with Claude Code agents: a spec, then a plan, then tests, with parallel sub-agents and browser end-to-end checks, and I review every change before it merges. Other work there includes rebuilding the franchisor's legacy XML data feeds with golden-file tests, reconciled to the cent against month-close stock valuation, plus 14 architecture decision records and 58 hand-written Postgres migrations.</p>
+
+    <h2>Open source and tooling</h2>
+    <ul>
+      <li><a href="https://github.com/AlmogBaku/debug-skill/pull/21">dap hang fix</a> (PR open upstream). dap is a Go debugger CLI for AI coding agents. Its js-debug child session was never read, so every Node.js debug command hung. The fix ships with a unit test that reproduces the hang, and the project's Node end-to-end test now passes in 3.5s.</li>
+      <li>A local MCP code-search setup (claude-context, Ollama embeddings, Milvus) that let agents search 6 proprietary repositories with no code leaving the machine. I set this up; the MCP server itself is an existing project.</li>
+      <li>A browser-driven end-to-end engine for my team's Claude Code plugin, which turns written user journeys into scripted agent-browser checks. I wrote 69 user-journey specs that agents run before merge.</li>
+    </ul>
+
+    <p><a href="index.html">Back to home</a></p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Ayush Sinha, Mumbai. <a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a> · <a href="https://github.com/Ayushsinha2004">GitHub</a> · <a href="https://www.linkedin.com/in/ayusharyan-sinha-632641257">LinkedIn</a></p>
+  </div>
+</footer>
+</body>
+</html>
