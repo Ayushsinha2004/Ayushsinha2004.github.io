@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>More Work</title>
-<meta name="description" content="Shorter write-ups of other AI systems Ayush Sinha has built: call-QA scoring, an AI sales platform, a WhatsApp nutrition coach, n8n agents and delivery at Maxtel.">
+<meta name="description" content="Shorter write-ups of other AI systems Ayush Sinha has built: call-QA scoring, an AI sales platform, a WhatsApp nutrition coach, n8n agents and delivery on my last contract.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fbf'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -27,7 +27,7 @@
     <p class="lede">Shorter notes on other systems I've built. Clients are described by country and industry.</p>
 
     <h2>Call-QA platform for an Irish insurance brokerage</h2>
-    <p>I built this end to end at Braind AI. Dialer recordings are pulled in, transcribed with Whisper, and scored by an LLM against a versioned sales-script knowledge base, with separate portals for managers and executives. Scoring sits behind a provider-agnostic adapter (OpenAI or Anthropic). Every score stores the model, temperature and knowledge-base version, and the system refuses to score against an incomplete rubric. An executable suite checks 27 acceptance criteria against golden transcripts. Managers' edits to coaching emails are summarised weekly into versioned prompt adjustments, leaving the base rubric untouched.</p>
+    <p>I built this end to end at my previous company. Dialer recordings are pulled in, transcribed with Whisper, and scored by an LLM against a versioned sales-script knowledge base, with separate portals for managers and executives. Scoring sits behind a provider-agnostic adapter (OpenAI or Anthropic). Every score stores the model, temperature and knowledge-base version, and the system refuses to score against an incomplete rubric. An executable suite checks 27 acceptance criteria against golden transcripts. Managers' edits to coaching emails are summarised weekly into versioned prompt adjustments, leaving the base rubric untouched.</p>
     <ul class="tags"><li>Whisper</li><li>OpenAI and Claude APIs</li><li>Fastify</li><li>Next.js</li><li>Postgres with RLS</li><li>AWS CDK</li><li>ECS Fargate</li></ul>
 
     <h2>AI sales platform for an Irish B2B supplier</h2>
@@ -39,12 +39,12 @@
     <ul class="tags"><li>React</li><li>Supabase Realtime</li><li>RAG</li><li>pgvector</li><li>LLM-as-a-judge</li><li>n8n</li><li>WhatsApp API</li></ul>
 
     <h2>41 live n8n agent workflows</h2>
-    <p>Across 6 client systems at Braind AI I built LLM agents in 41 live n8n workflows. They use n8n's LangChain nodes: the AI Agent node with tool calling, structured and auto-fixing output parsers, Postgres chat memory and Supabase vector-store retrieval, on OpenAI and Anthropic models, triggered by webhooks. I used LangChain only through these n8n nodes. I also built the agency's QA platform for these automations, which adds execution logging to live workflows without changing their behaviour across 5 client systems and runs a nightly evaluation funnel with Claude.</p>
+    <p>Across 6 client systems at my previous company I built LLM agents in 41 live n8n workflows. They use n8n's LangChain nodes: the AI Agent node with tool calling, structured and auto-fixing output parsers, Postgres chat memory and Supabase vector-store retrieval, on OpenAI and Anthropic models, triggered by webhooks. I used LangChain only through these n8n nodes. I also built the agency's QA platform for these automations, which adds execution logging to live workflows without changing their behaviour across 5 client systems and runs a nightly evaluation funnel with Claude.</p>
 
     <h2>Admin platform for an Irish financial-advice firm</h2>
     <p>As sole engineer I built a React, TypeScript and Supabase CRM with 30 schema migrations and 36 n8n workflows that connect SharePoint, Google Docs, Adobe Sign and other tools. GPT-4.1 drafts regulated suitability letters from client fact-find data, advisors edit them in the app, and a pipeline renders signature-ready documents. A 77-assertion simulator runs the production workflow code offline and fails if the letter template contract breaks.</p>
 
-    <h2>Delivery at Maxtel</h2>
+    <h2>Delivery on my last contract</h2>
     <p>I delivered 306 merged pull requests across 7 repositories in 4 months, and I'm the largest contributor to the core event-ledger service (225 of 746 merged PRs). I build with Claude Code agents: a spec, then a plan, then tests, with parallel sub-agents and browser end-to-end checks, and I review every change before it merges. Other work there includes rebuilding the franchisor's legacy XML data feeds with golden-file tests, reconciled to the cent against month-close stock valuation, plus 14 architecture decision records and 58 hand-written Postgres migrations.</p>
 
     <h2>Open source and tooling</h2>
