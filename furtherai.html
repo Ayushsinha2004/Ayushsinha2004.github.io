@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For FurtherAI</title>
+<meta name="description" content="Ayush Sinha, applying for Software Engineer, Backend/Fullstack (India) at FurtherAI. What I have built that matches your hard problems, and what I would do first.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fbf'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Ayush Sinha</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#case-studies">Case studies</a>
+      <a href="more-work.html">More work</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <p class="eyebrow">For FurtherAI · Software Engineer, Backend/Fullstack (India)</p>
+    <h1>I have built a smaller version of your product once</h1>
+    <p class="lede">At Braind AI I built the AI pipeline behind a document platform for an Irish life-insurance brokerage: signed documents in, OCR and structured extraction, validation agents, plain-code checks, and a human review dashboard. It tracked 3,205 policies in its first 7 months as monthly volume grew from 74 to 719.</p>
+    <p>I read <a href="https://www.furtherai.com/engineering-blogs/the-hard-problems-at-furtherai">The Hard Problems at FurtherAI</a> and <a href="https://www.furtherai.com/engineering-blogs/hardest-document-extraction-problem-in-insurance">your loss-run post</a>. Several of those problems are ones I have hit at smaller scale. Below is what I built for one of them this week, and what I would work on first.</p>
+
+    <h2>Built for you: loss-run-gym</h2>
+    <p>Your problem #7 is that insurance has no ImageNet, and that synthetic data has to carry the right distribution of imperfection. So I built a generator for synthetic loss runs that reproduces the failures from your post: a policy number printed only in a section header, subtotal rows laid out like claims, blank cells meaning "same as above", details and financials split across tables, rows repeated at page breaks, a carrier-prefix typo in a claim number, and zero-value claims.</p>
+    <p>Every PDF comes with exact ground truth. The scorer pairs claims by normalised number, then by optimal assignment over coverage, date, claimant and description, and reports row count next to totals, since totals alone can look right while claims are missing.</p>
+    <div class="callout">
+      <p><strong>A deliberately naive one-pass extractor on it</strong></p>
+      <p>Clean files: row accuracy 1.000, field accuracy 1.000, 8 of 8 pass.<br>
+      All traps on: row accuracy 0.971, field accuracy 0.433, 0 of 8 pass.</p>
+      <p class="small">The row count looks almost right while most fields are wrong. That is the reason to read row count, field accuracy and totals together.</p>
+    </div>
+    <ul class="links">
+      <li><a href="https://github.com/Ayushsinha2004/loss-run-gym">Code on GitHub</a></li>
+      <li><a href="https://github.com/Ayushsinha2004/loss-run-gym/blob/main/samples/loss_run_hard_042.pdf">A sample hard-level loss run (PDF)</a></li>
+    </ul>
+
+    <h2>Your hard problems, and what I have already done near them</h2>
+    <h3>Learning from human corrections (#2)</h3>
+    <p>For a WhatsApp AI nutrition coach used by about 49 Irish gyms, I built the review dashboard where the coach approves, edits or skips each drafted reply. A job diffed every AI draft against the coach's edit every 15 minutes and classified the change into 5 failure categories, then fed factual corrections back into the live prompt. LLM-proposed rubric changes needed a human to approve them before they went live.</p>
+    <h3>Human in the loop and verification (#5, #1)</h3>
+    <p>On the insurance pipeline, multi-agent cross-document checks raised 3,219 flags across 1,443 policies for a person to review before anything reached an insurer. Where a model should not decide, plain code did: an ISO 7064 mod-97 IBAN checksum, a 1 euro premium-variance rule, and duplicate prevention at every stage.</p>
+    <h3>Evals as the gate</h3>
+    <p>For a natural-language analytics assistant over a 64k-order ERP mirror, I built a 74-question eval that ran against the live endpoint after every prompt or schema change. It answered 70 of 74, and it refused destructive requests by design.</p>
+    <h3>Production backend</h3>
+    <p>At Maxtel (New Zealand) I rebuilt point-of-sale ingest for a 180-store rollout on S3, SQS FIFO and Fargate workers. p99 accept latency went from 13.3s to 1.63s in a 7-day load test with 0 dead-lettered messages. I have 306 merged PRs there across 7 repositories in 4 months.</p>
+
+    <h2>What I would do in my first two weeks</h2>
+    <ol>
+      <li><strong>Days 1 to 3.</strong> Run your extraction evals end to end and learn where accuracy is lost today. Add trap files for the failure modes you already know into the eval set, so a regression on any of them shows up before customers see it.</li>
+      <li><strong>Days 4 to 8.</strong> Work on consolidating underwriter corrections: group corrections that say the same thing, flag ones that conflict, and only promote a correction to a general rule after enough agreeing cases, with a person approving it.</li>
+      <li><strong>Days 9 to 14.</strong> Pick up whatever backend work is blocking the team most, with tests first.</li>
+    </ol>
+
+    <h2>Straight answers</h2>
+    <ul>
+      <li><strong>Experience:</strong> nearly 2 years of paid work, so under your 3+. The posting says strong ownership can offset other requirements. The work above is my case.</li>
+      <li><strong>Python:</strong> my daily language is TypeScript. I have shipped Python: a reporting engine with a validator that rejects any number in LLM prose that is not in a frozen figure bundle, a Django app with 108 backend tests, and the gym above.</li>
+      <li><strong>Hours:</strong> I am in Mumbai and can give 4 or more hours inside 9 AM to 9 PM PST every day.</li>
+      <li><strong>Start:</strong> I can start right away.</li>
+    </ul>
+    <ul class="links">
+      <li><a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/ayusharyan-sinha-632641257">LinkedIn</a></li>
+      <li><a href="https://github.com/Ayushsinha2004">GitHub</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Ayush Sinha, Mumbai. <a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a></p>
+    <p>Client names are left out on purpose. Each client is described by country and industry. All loss-run data in the gym is invented.</p>
+  </div>
+</footer>
+</body>
+</html>
