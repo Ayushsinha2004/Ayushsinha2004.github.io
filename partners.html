@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partner Overview</title>
+<meta name="description" content="Ayush Sinha: AI systems I have built for insurance, financial advice, sales, health and restaurant clients, described in business terms for sales partners.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fbf'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Ayush Sinha</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="more-work.html">More work</a>
+      <a href="work-with-me.html">Work with me</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <p class="eyebrow">Partner overview</p>
+    <h1>AI systems that replaced manual work for real businesses</h1>
+    <p class="lede">I am an AI full-stack engineer in Mumbai with nearly 2 years of paid work. Over that time I built AI products for insurance brokerages, a financial-advice firm, a B2B supplier, a health clinic, a gym network and a restaurant platform. This page explains each one in business terms: who it was for, what hurt, what I built and what changed. Client names are left out on purpose.</p>
+
+    <h2>The short version</h2>
+    <ul>
+      <li><strong>What I sell:</strong> working AI features on real data, built end to end by one engineer, from the AI layer to the screen staff use every day.</li>
+      <li><strong>Where it fits:</strong> sectors with paperwork, calls, quotes and approvals, such as insurance, financial advice, B2B sales and clinics.</li>
+      <li><strong>How I work:</strong> a person approves anything that matters. Plain code checks anything with one right answer, like bank details or totals. I measure quality with a test set before and after each change.</li>
+      <li><strong>Hours:</strong> remote from Mumbai, covering US, UK, EU and NZ working hours.</li>
+    </ul>
+
+    <h2>Projects</h2>
+
+    <section class="offer">
+      <h2>1. Policy paperwork for an Irish life-insurance brokerage</h2>
+      <p class="scope">Sector: insurance. Type: document AI plus a review dashboard.</p>
+      <p><strong>The business problem.</strong> Every new policy arrived as signed documents that staff re-keyed and checked by hand before they could go to an insurer. Errors in bank details or ages meant rejected applications.</p>
+      <p><strong>What I built.</strong> A pipeline that takes the signed documents in, reads them with OCR, extracts the fields, and runs automated checks across the identity, underwriting and financial documents. A dashboard lets staff review flagged cases and approve before anything is submitted.</p>
+      <p><strong>What changed.</strong> The platform tracked 3,205 policies in its first 7 months, with 99.9% fully processed, as monthly volume grew from 74 to 719. The checks raised 3,219 flags across 1,443 policies for a person to review, including 100 critical age-band cases, before submission to insurers. Dashboard load time fell from about 15 seconds to 2.</p>
+      <p class="small"><strong>Technical note.</strong> DocuSign intake, Mistral OCR, GPT structured extraction, n8n, React and TypeScript on Supabase. Bank details are validated with an ISO 7064 checksum in code, not by the model.</p>
+    </section>
+
+    <section class="offer">
+      <h2>2. Call quality review for an Irish insurance brokerage</h2>
+      <p class="scope">Sector: insurance sales. Type: AI call scoring.</p>
+      <p><strong>The business problem.</strong> Managers could only listen to a small sample of sales calls, so coaching was patchy and compliance gaps went unseen.</p>
+      <p><strong>What I built.</strong> A platform that pulls in recorded calls, transcribes them, scores each against the company's own sales script, and shows managers and executives the results in separate portals. It also drafts coaching emails, and it learns from the edits managers make to those drafts.</p>
+      <p><strong>What changed.</strong> Every call can be scored instead of a sample. The scoring refuses to run against an incomplete script, and every score records which model and script version produced it, so results can be audited. The system is checked against 27 acceptance criteria on golden transcripts, and runs for roughly $55 to $70 a month in infrastructure.</p>
+      <p class="small"><strong>Technical note.</strong> Whisper transcription, OpenAI or Anthropic models behind one adapter, Fastify, Next.js, Postgres, AWS CDK on ECS Fargate.</p>
+    </section>
+
+    <section class="offer">
+      <h2>3. Follow-up automation for a 5-brand Irish insurance group</h2>
+      <p class="scope">Sector: insurance sales. Type: workflow automation.</p>
+      <p><strong>The business problem.</strong> Missed calls and unanswered leads were slipping through across five brands, with no consistent follow-up.</p>
+      <p><strong>What I built.</strong> I led development of a layer that detects missed calls, checks the customer's history in the CRM, then runs follow-up by WhatsApp, SMS and email, including booking a callback.</p>
+      <p><strong>What changed.</strong> One system covers 5 brands with 22 pipelines, instead of each team chasing leads by hand.</p>
+      <p class="small"><strong>Technical note.</strong> n8n flows over a CRM, a cloud dialer and WhatsApp, with Claude for message handling.</p>
+    </section>
+
+    <section class="offer">
+      <h2>4. Admin and letters platform for an Irish financial-advice firm</h2>
+      <p class="scope">Sector: financial advice. Type: CRM plus document automation. Sole engineer.</p>
+      <p><strong>The business problem.</strong> Advisers spent hours writing regulated suitability letters and moving data between a dozen tools.</p>
+      <p><strong>What I built.</strong> A CRM and admin platform connected to 10 or more tools, with 36 automated workflows. The AI drafts each suitability letter from the client's fact-find data, the adviser edits it in the browser, and the system produces a signature-ready document and sends it for signing.</p>
+      <p><strong>What changed.</strong> A letter that used to be written from scratch is now drafted, reviewed and sent for signature in one flow. A 77-assertion test simulator guards the letter template, so a change that would break it is caught before advisers see it.</p>
+      <p class="small"><strong>Technical note.</strong> React, TypeScript, Supabase with 30 schema migrations, n8n, GPT-4.1, Microsoft Graph, and e-signature.</p>
+    </section>
+
+    <section class="offer">
+      <h2>5. Sales platform for an Irish B2B workplace supplier</h2>
+      <p class="scope">Sector: B2B sales. Type: lead generation and outreach. Sole engineer, about 6 weeks.</p>
+      <p><strong>The business problem.</strong> The sales team had thousands of website visitors and no way to tell which companies were new prospects, which were existing customers and which were worth a call.</p>
+      <p><strong>What I built.</strong> A platform that takes about 2,000 visiting companies, removes anyone already in the ERP using a 5-pass matching process, scores each lead from 0 to 100, finds extra leads from public signals, and drafts outreach that a salesperson approves before it goes out. Every lead keeps the evidence behind it, and the AI is not allowed to invent company names.</p>
+      <p><strong>What changed.</strong> Reps start from a ranked list with reasons attached. Nothing is sent without a human saying yes.</p>
+      <p class="small"><strong>Technical note.</strong> Node, Express, React, TypeScript, OpenAI structured output, Supabase, Docker. Deployed on the client's own server.</p>
+    </section>
+
+    <section class="offer">
+      <h2>6. Ask-your-data assistant for the same supplier</h2>
+      <p class="scope">Sector: B2B operations. Type: natural-language analytics.</p>
+      <p><strong>The business problem.</strong> Managers wanted answers about orders and customers but depended on someone to run reports.</p>
+      <p><strong>What I built.</strong> A chat assistant over about 64,000 orders. The AI does not write database queries. It produces a restricted query plan that is checked and run read-only, so it cannot change or delete data, and a second check confirms the result actually answers the question.</p>
+      <p><strong>What changed.</strong> In a hand-checked live test, it answered 70 of 74 questions and refused out-of-scope and destructive requests. I re-run that 74-question test after every change.</p>
+      <p class="small"><strong>Technical note.</strong> OpenAI, PostgREST, Node, PostgreSQL. A JSON query plan is used in place of text-to-SQL.</p>
+    </section>
+
+    <section class="offer">
+      <h2>7. Cross-sell engine for the same supplier</h2>
+      <p class="scope">Sector: B2B sales. Type: automation.</p>
+      <p><strong>What I built.</strong> The automations behind a live engine that watches ERP data for cross-sell triggers, drafts outreach with AI and schedules the emails. In one day I prototyped an assistant that works through the 1,800 live opportunities.</p>
+    </section>
+
+    <section class="offer">
+      <h2>8. WhatsApp nutrition coach for about 49 Irish gyms</h2>
+      <p class="scope">Sector: fitness and health. Type: AI assistant with human approval.</p>
+      <p><strong>The business problem.</strong> A coach could not answer WhatsApp messages from members across dozens of gyms quickly while keeping advice accurate.</p>
+      <p><strong>What I built.</strong> I built the dashboard where the coach approves, edits or skips each AI-drafted reply, plus a quality loop. Every edit is captured as a learning signal: every 15 minutes the system compares each AI draft with the coach's edit, sorts the change into 5 failure categories and feeds factual corrections back in. Proposed scoring changes need a human to approve them.</p>
+      <p><strong>What changed.</strong> The assistant gets better from the coach's own corrections, and the coach stays in control of what members see.</p>
+      <p class="small"><strong>Technical note.</strong> React, TypeScript, Tailwind, Supabase Realtime, pgvector retrieval, LLM-as-judge scoring, n8n, WhatsApp API.</p>
+    </section>
+
+    <section class="offer">
+      <h2>9. Email sales system for an Irish health clinic</h2>
+      <p class="scope">Sector: health clinic. Type: AI drafting with staff approval.</p>
+      <p><strong>What I built.</strong> A system where AI sorts incoming enquiries and drafts replies, and staff approve and send them in the original email thread from a review screen. I also moved about 2,100 clients off a spreadsheet-style database into a proper one.</p>
+    </section>
+
+    <section class="offer">
+      <h2>10. Monitoring for the agency's AI automations</h2>
+      <p class="scope">Sector: agency operations. Type: quality assurance for AI.</p>
+      <p><strong>The business problem.</strong> Clients' automations could fail silently, and nobody knew until a customer complained.</p>
+      <p><strong>What I built.</strong> A QA platform that adds logging to live automations without changing how they behave, covers 5 client systems, and runs a nightly review. Code sorts the runs first, an AI model checks only the flagged ones, and a daily report goes to a person. Costs stay flat as volume grows.</p>
+      <p><strong>What changed.</strong> Failures raise alerts, and error and daily-report workflows run live for 2 clients.</p>
+    </section>
+
+    <section class="offer">
+      <h2>11. ROI reports for the agency's clients</h2>
+      <p class="scope">Sector: agency reporting. Type: automated reporting.</p>
+      <p><strong>What I built.</strong> A reporting engine that turns client data into reports showing what the automation delivered. The AI writes the commentary, but a checker rejects any number in that text that is not in a fixed set of computed figures, so a report cannot contain an invented statistic.</p>
+    </section>
+
+    <section class="offer">
+      <h2>12. 41 live AI agent workflows across 6 client systems</h2>
+      <p class="scope">Across all of the above.</p>
+      <p>The agent logic behind these products runs in 41 live workflows, using tool calling, structured outputs, chat memory and document search on OpenAI and Anthropic models.</p>
+    </section>
+
+    <section class="offer">
+      <h2>13. Order ingest for a New Zealand restaurant platform</h2>
+      <p class="scope">Sector: quick-service restaurants. Type: backend engineering. My most recent contract.</p>
+      <p><strong>The business problem.</strong> A new platform replacing a legacy system had to take daily sales data from 180 stores, and the first design timed out under that load.</p>
+      <p><strong>What I built.</strong> I rebuilt the intake as a queue with background workers that scale up on demand.</p>
+      <p><strong>What changed.</strong> In a 7-day test simulating 180 stores, the slowest 1 percent of uploads were accepted in 1.63 seconds instead of 13.3. Throughput rose from 3.75 to 13 to 15 uploads a minute, with 0 lost messages and 0 gateway timeouts. I have 306 merged pull requests across 7 repositories in 4 months on that platform.</p>
+    </section>
+
+    <section class="offer">
+      <h2>14. Open-source tools I made</h2>
+      <p>I wrote <a href="https://github.com/Ayushsinha2004/loss-run-gym">loss-run-gym</a>, a generator and scorer for synthetic insurance loss runs, for teams testing document extraction. I also published a <a href="https://github.com/Ayushsinha2004/weather-aware-truck-routing">weather-aware truck routing</a> demo and a lending app, <a href="https://github.com/Ayushsinha2004/lendloop">LendLoop</a>.</p>
+    </section>
+
+    <h2>Where a partnership could fit</h2>
+    <ul>
+      <li><strong>You bring the client, I build it.</strong> A scoped pilot, such as document intake or call scoring, quoted per project.</li>
+      <li><strong>White label.</strong> I work under your brand with your email, repos and project tools.</li>
+      <li><strong>A paid first week.</strong> A small, defined piece so the client sees working software before a larger commitment.</li>
+    </ul>
+    <p class="small">I do not guarantee outcomes for a new client. The numbers above come from systems I built and the data they ran on.</p>
+
+    <ul class="links">
+      <li><a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/ayusharyan-sinha-632641257">LinkedIn</a></li>
+      <li><a href="https://github.com/Ayushsinha2004">GitHub</a></li>
+      <li><a href="work-with-me.html">Fixed-scope offers</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Ayush Sinha, Mumbai. <a href="mailto:ayusharyansinha21@gmail.com">ayusharyansinha21@gmail.com</a></p>
+    <p>Client names are left out on purpose. Each client is described by country and industry.</p>
+  </div>
+</footer>
+</body>
+</html>
